@@ -1,1 +1,11 @@
-"Hello World" 
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script>
+        ethereum.enable();
+        var web3js = new Web3(web3.currentProvider);
+        web3js.eth.getHashrate().then(console.log);
+        console.log(123);
+    </script>
+  </head>
+</html>
