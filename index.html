@@ -4,7 +4,7 @@
     <script>
         ethereum.enable();
         var web3js = new Web3(web3.currentProvider);
-        web3js.eth.getHashrate().then(console.log);
+        web3js.eth.getBalance("0x4b6d397A62B4114Fa5135ad1caa6f4683D51A9bF").then(console.log);
         console.log(123);
     </script>
   </head>
