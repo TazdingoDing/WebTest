@@ -1,74 +1,12 @@
 <html>
-    <script>
-
-
-    function showAccount(){
-        document.getElementById('account').innerHTML = defaultAccount;
-    }
-
-
-    function getArticle() {
-        if (isNormalInteger(document.getElementById('articleId').value)){
-            document.getElementById('text').value = Number(document.getElementById('articleId').value);
-            var articleNum = Number(document.getElementById('articleId').value);
-            myContract.methods.getContent(articleNum).send({from:}).then(function (result) {
-                document.getElementById('text').value = result;
-            });
-        }
-        
-        
-    }
-
-    function isNormalInteger(str) {
-        var n = Math.floor(Number(str));
-        return n !== Infinity && String(n) === str && n >= 0;
-    }
-    </script>
-  <p>account:</p></br> <p id="account"></p></br>
-  <button onclick="showAccount()">show account</button></br>
-  
-  
-  
-  <input id="articleId" type="number"/></br>
-  
-  
-  
-  <textarea id="text" cols="50" rows="5">
-　輸入你想要寫的內容...
-  </textarea>
-  <button onclick="getArticle()">Click me</button>
-  
-  <p id="demo"></p></br>
-  <p id="demo2"></p></br>
-  <p id="demo3"></p>
-  
-  
-  <head>
+<head>
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
-    
-    
-    <script>
 
-    
-        
-        ethereum.enable();
-        var web3js = new Web3(web3.currentProvider);
-        
-        web3js.eth.getBalance("0x4b6d397A62B4114Fa5135ad1caa6f4683D51A9bF").then(console.log);
-        web3js.eth.getAccounts().then(function (result) {
-            const defaultAccount = result[0];
-        });
-        
-
-        
-
-        
-        var account = "0x4b6d397A62B4114Fa5135ad1caa6f4683D51A9bF";
-
-        document.getElementById("demo").innerHTML = ethereum.selectedAddress;
-        
-        
-        var myContract = new web3js.eth.Contract([
+<script>
+ethereum.enable();
+var web3js = new Web3(web3.currentProvider);
+var defaultAccount = "?";
+var myContract = new web3js.eth.Contract([
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -217,24 +155,37 @@
 		"type": "function"
 	}
 ], '0xaf925d1681f3f11308c1810a0b139684Dc558342');
+
+
+
+
+
+async function showAccount(){
+    defaultAccount = await web3js.eth.getAccounts();
+    document.getElementById('account').innerHTML = defaultAccount[0];
+}
+
+async function getArticle() {
+    if (isNormalInteger(document.getElementById('articleId').value)){
+        defaultAccount = await web3js.eth.getAccounts();
+        defaultAccount = defaultAccount[0];
         
+        var articleNum = Number(document.getElementById('articleId').value);
+        document.getElementById('text').value = await myContract.methods.getContent(articleNum).call({from: defaultAccount});
+    }
+}
 
+function isNormalInteger(str) {
+    var n = Math.floor(Number(str));
+    return n !== Infinity && String(n) === str && n >= 0;
+}
+</script>
+</head>
+  <p>account:</p>
+  <p id="account"></p>
+  <button onclick="showAccount()">show account</button></br></br></br></br>
 
-myContract.methods.ssss().call()
-.then(function (val) {
-          document.getElementById("demo2").innerHTML = val;
-        });
-
-
-myContract.getPastEvents("allEvents", {fromBlock:1}).then(function (val) {
-          val.forEach(element => document.getElementById("demo3").innerHTML = document.getElementById("demo3").innerHTML +
-          "article: " + element.returnValues["articleId"] + "      " +
-          "by: " + element.returnValues["fromAddress"] + "          " +
-          "string: " + element.returnValues["editString"] +   '</br>')
-
-        });
-
-    </script>
-  </head>
-
+  id: <input id="articleId" type="number"/>
+  <button onclick="getArticle()">get article</button></br>
+  <textarea id="text" cols="50" rows="5">content</textarea>
 </html>
