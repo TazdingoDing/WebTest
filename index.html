@@ -174,6 +174,16 @@ async function getArticle() {
         document.getElementById('text').value = await myContract.methods.getContent(articleNum).call({from: defaultAccount});
     }
 }
+async function editArticle() {
+    if (isNormalInteger(document.getElementById('articleId').value)){
+        defaultAccount = await web3js.eth.getAccounts();
+        defaultAccount = defaultAccount[0];
+        
+        var articleNum = Number(document.getElementById('articleId').value);
+        var editedContent = document.getElementById('text').value;
+        await myContract.methods.edit(articleNum, editedContent).send({from: defaultAccount});
+    }
+}
 
 function isNormalInteger(str) {
     var n = Math.floor(Number(str));
@@ -187,5 +197,6 @@ function isNormalInteger(str) {
 
   id: <input id="articleId" type="number"/>
   <button onclick="getArticle()">get article</button></br>
-  <textarea id="text" cols="50" rows="5">content</textarea>
+  <textarea id="text" cols="50" rows="5">content</textarea></br>
+  <button onclick="editArticle()">save</button></br>
 </html>
