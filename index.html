@@ -88,6 +88,19 @@ var myContract = new web3js.eth.Contract([
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getTopArticleNum",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -154,7 +167,7 @@ var myContract = new web3js.eth.Contract([
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-], '0xaf925d1681f3f11308c1810a0b139684Dc558342');
+], '0xe6Ba3b4Af2d0fBD0f9f6DC85A52B50C83a7d7Ad6');
 
 
 
@@ -185,6 +198,16 @@ async function editArticle() {
     }
 }
 
+async function newArticle() {
+    defaultAccount = await web3js.eth.getAccounts();
+    defaultAccount = defaultAccount[0];
+        
+    var newContent = document.getElementById('newText').value;
+    await myContract.methods.create(newContent).send({from: defaultAccount});
+    document.getElementById('newID').innerHTML = "New Article ID: " + await myContract.methods.getTopArticleNum().call({from: defaultAccount});
+
+}
+
 function isNormalInteger(str) {
     var n = Math.floor(Number(str));
     return n !== Infinity && String(n) === str && n >= 0;
@@ -199,4 +222,8 @@ function isNormalInteger(str) {
   <button onclick="getArticle()">get article</button></br>
   <textarea id="text" cols="50" rows="5">content</textarea></br>
   <button onclick="editArticle()">save</button></br>
+  </br></br></br>
+  <textarea id="newText" cols="50" rows="5"></textarea></br>
+  <button onclick="newArticle()">new</button></br>
+  <p id="newID"></p>
 </html>

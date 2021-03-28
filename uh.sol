@@ -14,7 +14,10 @@ contract AAA {
         address owner;
         
     }
-  
+    function getTopArticleNum() public view returns(uint){
+        return articleNum-1;
+    }
+    
     function create(string memory _content) public{
         article storage newArticle = articles[articleNum++];
         newArticle.content = _content;
@@ -70,3 +73,4 @@ contract AAA {
 
     
 }
+
